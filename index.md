@@ -13,11 +13,10 @@ humandate: "Jan 24 - Feb 7, 2022"    # human-readable dates for the workshop (e.
 humantime: "6:00 pm - 9:00 pm EST"    # human-readable times for the workshop e.g., "9:00 am - 4:30 pm CEST (7:00 am - 2:30 pm UTC)"
 startdate: 2022-01-24      # machine-readable start date for the workshop in YYYY-MM-DD format like 2015-01-01
 enddate: 2022-02-07        # machine-readable end date for the workshop in YYYY-MM-DD format like 2015-01-02
-instructor: ["instructor one", "instructor two"] # boxed, comma-separated list of instructors' names as strings, like ["Kris Joseph", "Ali Sadaqain", "Walter Griffatong"]
-helper: ["Anna St.Onge"]     # boxed, comma-separated list of helpers' names, like ["Marlyn Wescoff", "Fran Bilas", "Ruth Lichterman"]
+instructor: ["Kris Joseph", "Ali Sadaqain", "Walter Griffatong"] # boxed, comma-separated list of instructors' names as strings, like ["Kris Joseph", "Ali Sadaqain", "Walter Griffatong"]
+helper: []     # boxed, comma-separated list of helpers' names, like ["Marlyn Wescoff", "Fran Bilas", "Ruth Lichterman"]
 email: ["kjo@yorku.ca"]    # boxed, comma-separated list of contact email addresses for the host, lead instructor, or whoever else is handling questions, like ["marlyn.wescoff@example.org", "fran.bilas@example.org", "ruth.lichterman@example.org"]
-collaborative_notes:  # optional: URL for the workshop collaborative notes, e.g. an Etherpad or Google Docs document (e.g., https://pad.carpentries.org/2015-01-01-euphoria)
-eventbrite:           # optional: alphanumeric key for Eventbrite registration, e.g., "1234567890AB" (if Eventbrite is being used)
+collaborative-notes: https://pad.carpentries.org/2022-01-24-yul
 ---
 
 
@@ -170,37 +169,6 @@ Modify the block below if there are any special requirements.
 </p>
 
 {% comment %}
-ACCESSIBILITY
-
-Modify the block below if there are any barriers to accessibility or
-special instructions.
-{% endcomment %}
-<p id="accessibility">
-  <strong>Accessibility:</strong>
-{% if online == "false" %}
-  We are committed to making this workshop
-  accessible to everybody.  For workshops at a physical location, the workshop organizers have checked that:
-</p>
-<ul>
-  <li>The room is wheelchair / scooter accessible.</li>
-  <li>Accessible restrooms are available.</li>
-</ul>
-<p>
-  Materials will be provided in advance of the workshop and
-  large-print handouts are available if needed by notifying the
-  organizers in advance.  If we can help making learning easier for
-  you (e.g. sign-language interpreters, lactation facilities) please
-  get in touch (using contact details below) and we will
-  attempt to provide them.
-</p>
-{% else %}
-  We are dedicated to providing a positive and accessible learning environment for all. Please
-  notify the instructors in advance of the workshop if you require any accommodations or if there is
-  anything we can do to make this workshop more accessible to you.
-</p>
-{% endif %}
-
-{% comment %}
 CONTACT EMAIL ADDRESS
 
 Display the contact email address set in the configuration file.
@@ -245,12 +213,13 @@ Edit the text to match who can attend the workshop. For instance:
 - This workshop is open to the public.
 - If you are interested in attending this workshop, contact me@example.com
   for more information
+{% endcomment %}
 
 <p id="who-can-attend">
     <strong>Who can attend?:</strong>
-    This workshop is open to ....
+    This workshop is open to students and faculty attending York University.
 </p>
-{% endcomment %}
+
 
 <hr/>
 
@@ -260,14 +229,9 @@ CODE OF CONDUCT
 <h2 id="code-of-conduct">Code of Conduct</h2>
 
 <p>
-Everyone who participates in Carpentries activities is required to conform to the <a href="https://docs.carpentries.org/topic_folders/policies/code-of-conduct.html">Code of Conduct</a>. This document also outlines how to report an incident if needed.
+Everyone who participates in Carpentries activities is required to conform to the <a href="https://docs.carpentries.org/topic_folders/policies/code-of-conduct.html">Code of Conduct</a>.
 </p>
 
-<p class="text-center">
-  <a href="https://goo.gl/forms/KoUfO53Za3apOuOK2">
-    <button type="button" class="btn btn-info">Report a Code of Conduct Incident</button>
-  </a>
-</p>
 <hr/>
 
 
@@ -291,29 +255,6 @@ available at https://codimd.carpentries.org
 We will use this <a href="{{ page.collaborative_notes }}">collaborative document</a> for chatting, taking notes, and sharing URLs and bits of code.
 </p>
 <hr/>
-{% endif %}
-
-
-{% comment %}
-SURVEYS - DO NOT EDIT SURVEY LINKS
-{% endcomment %}
-<h2 id="surveys">Surveys</h2>
-<p>Please be sure to complete these surveys before and after the workshop.</p>
-{% if site.carpentry == "incubator" %}
-<p><a href="{{ site.incubator_pre_survey }}">Pre-workshop Survey</a></p>
-<p><a href="{{ site.incubator_post_survey }}">Post-workshop Survey</a></p>
-{% elsif site.incubator_pre_survey or site.incubator_post_survey %}
-<div class="alert alert-danger">
-WARNING: you have defined custom pre- and/or post-survey links for
-a workshop not configured for The Carpentries Incubator
-(the value of `curriculum` is not set to `incubator` in `_config.yml`).
-Please comment out the `incubator_pre_survey` and `incubator_post_survey` fields
-in `_config.yml` or, if this workshop is teaching a lesson in the Incubator,
-change the value of `carpentry` to `incubator`.
-</div>
-{% else %}
-<p><a href="{{ site.pre_survey }}{{ site.github.project_title }}">Pre-workshop Survey</a></p>
-<p><a href="{{ site.post_survey }}{{ site.github.project_title }}">Post-workshop Survey</a></p>
 {% endif %}
 
 <hr/>
@@ -343,16 +284,7 @@ of code below the Schedule `<h2>` header below with
 
 <h2 id="schedule">Schedule</h2>
 
-{% if site.carpentry == "swc" %}
-{% include swc/schedule.html %}
-{% elsif site.carpentry == "dc" %}
-{% include dc/schedule.html %}
-{% elsif site.carpentry == "lc" %}
-{% include lc/schedule.html %}
-{% elsif site.carpentry == "incubator" %}
-This workshop is teaching a lesson in [The Carpentries Incubator](https://carpentries-incubator.org/).
-Please check [the lesson homepage]({{ site.incubator_lesson_site }}) for a list of lesson sections and estimated timings.
-{% endif %}
+{{% include custom-schedule.html %}
 
 {% comment %}
 Edit/replace the text above if you want to include a schedule table.
@@ -382,15 +314,7 @@ please preview your site before committing, and make sure to run
 <h2 id="setup">Setup</h2>
 
 <p>
-  To participate in a
-  {% if site.carpentry == "swc" %}
-  Software Carpentry
-  {% elsif site.carpentry == "dc" %}
-  Data Carpentry
-  {% elsif site.carpentry == "lc" %}
-  Library Carpentry
-  {% endif %}
-  workshop,
+  To participate in this workshop,
   you will need access to software as described below.
   In addition, you will need an up-to-date web browser.
 </p>
@@ -408,7 +332,7 @@ For online workshops, the section below provides:
 
 If you do not use Zoom for your online workshop, edit the file
 `_includes/install_instructions/videoconferencing.html`
-to include the relevant installation instrucctions.
+to include the relevant installation instructions.
 {% endcomment %}
 {% if online != "false" %}
 {% include install_instructions/videoconferencing.html %}
