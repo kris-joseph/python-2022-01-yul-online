@@ -10,7 +10,7 @@ lessons individually can be a bit difficult, however, so we recommend the all-in
 installer [Anaconda][anaconda].
 
 Regardless of how you choose to install it, please make sure you install Python
-version 3.x (e.g., Python 3.6 version). Also, please set up your Python environment at
+version 3.x (e.g., Python 3.9 version). Also, please set up your Python environment at
 least a day in advance of the workshop. If you encounter problems with the
 installation procedure, ask your workshop organizers via e-mail for assistance so
 you are ready to go as soon as the workshop begins.
@@ -70,7 +70,9 @@ If you run into any difficulties, please request help before the workshop begins
 
 ## Starting Python
 
-TBD
+In the Anaconda Navigator, select the **Home** tab on the left hand side. In the main panel, locate the `JupyterLab` tile and select the **Launch** button underneath the decriptive text in the tile.
+
+As an alternative to the web-based JupyterLab setup, you may use an interactive, text-based command prompt. To do this, locate the `Qt Console` entry and select the **Launch** button underneath the decriptive text in the tile.
 
 [anaconda]: https://www.anaconda.com/distribution
 [anaconda-dl]: https://www.anaconda.com/download/
