@@ -120,7 +120,7 @@ with open ("SAFI_results.csv") as f:  # Open the file and assign it to a variabl
 
 Having a list of the number of children from all of the records is one thing, but it is more likely that we would want a histogram or tally of this data. By scanning up and down the previous output, there appears to be a maximum of 5 children for any one person, but we will play safe and assume there may be more.
 
-### Step 3 - How many of each different roof types are there?
+### Step 3 - Use Pythong to tally the records for each posible number of children
 
 ~~~
 # 1
@@ -419,4 +419,4 @@ For next class, complete the following exercise:
 
 Write a script that opens the `'insurance.csv'` file, reads it, and creates a new file called `'insurance_male10k.csv'` that contains only the records for males whose charges are greater than $10,000.
 
-**Hint**: Use one of the examples in this episode as a template. In the the `if` statements, how can you test the value of the entry in the `charges` column to keep only entries greater than a cerain value?
+**Hint**: Use one of the examples in this episode as a template. In the the `if` statements, how can you test the value of the entry in the `charges` column to keep only entries greater than a certain value?
