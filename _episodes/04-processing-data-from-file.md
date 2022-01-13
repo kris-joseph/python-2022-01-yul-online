@@ -401,7 +401,7 @@ People with 5 children = 18
 ~~~
 {: .output}
 
-What are we  doing here?
+What are we doing here?
 
 1. Open the file
 2. Ignore the headerline
