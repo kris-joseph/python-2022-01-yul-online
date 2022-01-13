@@ -21,7 +21,7 @@ keypoints:
 ---
 ## A list stores many values in a single structure.
 
-*   Doing calculations with a hundred variables called `pressure_001`, `pressure_002`, etc.,
+*   Doing calculations with a hundred variables called `bmi_001`, `bmi_002`, etc.,
     would be at least as slow as doing them by hand.
 *   Use a *list* to store many values together.
     *   Contained within square brackets `[...]`.
@@ -29,13 +29,13 @@ keypoints:
 *   Use `len` to find out how many values are in a list.
 
 ~~~
-pressures = [0.273, 0.275, 0.277, 0.275, 0.276]
-print('pressures:', pressures)
-print('length:', len(pressures))
+bmi_values = [27.9, 33.77, 33, 22.705, 28.88]
+print('BMI values:', bmi_values)
+print('length:', len(bmi_values))
 ~~~
 {: .language-python}
 ~~~
-pressures: [0.273, 0.275, 0.277, 0.275, 0.276]
+BMI values: [27.9, 33.77, 33, 22.705, 28.88]
 length: 5
 ~~~
 {: .output}
@@ -45,13 +45,13 @@ length: 5
 *   Just like strings.
 
 ~~~
-print('zeroth item of pressures:', pressures[0])
-print('fourth item of pressures:', pressures[4])
+print('zeroth item of BMI values:', bmi_values[0])
+print('fourth item of BMI values:', bmi_values[4])
 ~~~
 {: .language-python}
 ~~~
-zeroth item of pressures: 0.273
-fourth item of pressures: 0.276
+zeroth item of BMI values: 27.9
+fourth item of BMI values: 28.88
 ~~~
 {: .output}
 
@@ -60,12 +60,12 @@ fourth item of pressures: 0.276
 *   Use an index expression on the left of assignment to replace a value.
 
 ~~~
-pressures[0] = 0.265
-print('pressures is now:', pressures)
+bmi_values[0] = 30.8
+print('bmi_values is now:', bmi_values)
 ~~~
 {: .language-python}
 ~~~
-pressures is now: [0.265, 0.275, 0.277, 0.275, 0.276]
+bmi_values is now: [30.8, 33.77, 33, 22.705, 28.88]
 ~~~
 {: .output}
 
@@ -74,15 +74,15 @@ pressures is now: [0.265, 0.275, 0.277, 0.275, 0.276]
 *   Use `list_name.append` to add items to the end of a list.
 
 ~~~
-primes = [2, 3, 5]
-print('primes is initially:', primes)
-primes.append(7)
-print('primes has become:', primes)
+ages = [6, 1, 3]
+print('ages is initially:', ages)
+ages.append(2)
+print('ages has become:', ages)
 ~~~
 {: .language-python}
 ~~~
-primes is initially: [2, 3, 5]
-primes has become: [2, 3, 5, 7]
+ages is initially: [6, 1, 3]
+ages has become: [6, 1, 3, 2]
 ~~~
 {: .output}
 
@@ -95,19 +95,19 @@ primes has become: [2, 3, 5, 7]
 *   `extend` is similar to `append`, but it allows you to combine two lists.  For example:
 
 ~~~
-teen_primes = [11, 13, 17, 19]
-middle_aged_primes = [37, 41, 43, 47]
-print('primes is currently:', primes)
-primes.extend(teen_primes)
-print('primes has now become:', primes)
-primes.append(middle_aged_primes)
-print('primes has finally become:', primes)
+teen_ages = [19, 18, 14, 17]
+middle_ages = [46, 56, 37, 41]
+print('ages is currently:', ages)
+child_ages.extend(teen_ages)
+print('ages has now become:', ages)
+ages.append(middle_ages)
+print('ages has finally become:', ages)
 ~~~
 {: .language-python}
 ~~~
-primes is currently: [2, 3, 5, 7]
-primes has now become: [2, 3, 5, 7, 11, 13, 17, 19]
-primes has finally become: [2, 3, 5, 7, 11, 13, 17, 19, [37, 41, 43, 47]]
+ages is currently: [6, 1, 3, 2]
+ages has now become: [6, 1, 3, 2, 19, 18, 14, 17]
+ages has finally become: [6, 1, 3, 2, 19, 18, 14, 17, [46, 56, 37, 41]]
 ~~~
 {: .output}
 
@@ -120,15 +120,15 @@ two-dimensional - the last element in `primes` is a list, not an integer.
 *   `del` is not a function or a method, but a statement in the language.
 
 ~~~
-primes = [2, 3, 5, 7, 9]
-print('primes before removing last item:', primes)
-del primes[4]
-print('primes after removing last item:', primes)
+ages = [6, 1, 3, 2, 8]
+print('ages before removing last item:', ages)
+del ages[4]
+print('ages after removing last item:', ages)
 ~~~
 {: .language-python}
 ~~~
-primes before removing last item: [2, 3, 5, 7, 9]
-primes after removing last item: [2, 3, 5, 7]
+ages before removing last item: [6, 1, 3, 2, 8]
+ages after removing last item: [6, 1, 3, 2]
 ~~~
 {: .output}
 
@@ -137,7 +137,7 @@ primes after removing last item: [2, 3, 5, 7]
 *   Use `[]` on its own to represent a list that doesn't contain any values.
     *   "The zero of lists."
 *   Helpful as a starting point for collecting values
-        (which we will see in the [next episode]({{ page.root }}/12-for-loops/)).
+        (which we will see in the [next episode]({{ page.root }}/07-for-loops/)).
 
 ## Lists may contain values of different types.
 
@@ -153,14 +153,14 @@ goals = [1, 'Create lists.', 2, 'Extract items from lists.', 3, 'Modify lists.']
 *   Get single characters from a character string using indexes in square brackets.
 
 ~~~
-element = 'carbon'
-print('zeroth character:', element[0])
-print('third character:', element[3])
+region = 'northwest'
+print('zeroth character:', northwest[0])
+print('third character:', northwest[3])
 ~~~
 {: .language-python}
 ~~~
-zeroth character: c
-third character: b
+zeroth character: n
+third character: t
 ~~~
 {: .output}
 
@@ -173,7 +173,7 @@ third character: b
     not a collection of values.
 
 ~~~
-element[0] = 'C'
+region[0] = 'N'
 ~~~
 {: .language-python}
 ~~~
@@ -186,12 +186,12 @@ TypeError: 'str' object does not support item assignment
 ## Indexing beyond the end of the collection is an error.
 
 *   Python reports an `IndexError` if we attempt to access a value that doesn't exist.
-    *   This is a kind of [runtime error]({{ page.root }}/04-built-in/#runtime-error).
+    *   This is a kind of [runtime error]({{ page.root }}/05-built-in/#runtime-error).
     *   Cannot be detected as the code is parsed
         because the index might be calculated based on data.
 
 ~~~
-print('99th element of element is:', element[99])
+print('99th element of region is:', region[99])
 ~~~
 {: .language-python}
 ~~~
@@ -278,8 +278,8 @@ IndexError: string index out of range
 > What does the following program print?
 >
 > ~~~
-> element = 'helium'
-> print(element[-1])
+> region = 'southeast'
+> print(region[-1])
 > ~~~
 > {: .language-python}
 >
@@ -292,7 +292,7 @@ IndexError: string index out of range
 >     (Hint: you will need to combine slicing and negative indexing.)
 >
 > > ## Solution
-> > The program prints `m`.
+> > The program prints `t`.
 > > 1. Python interprets a negative index as starting from the end (as opposed to
 > >    starting from the beginning).  The last element is `-1`.
 > > 2. The last index that can safely be used with a list of N elements is element
@@ -307,9 +307,9 @@ IndexError: string index out of range
 > What does the following program print?
 >
 > ~~~
-> element = 'fluorine'
-> print(element[::2])
-> print(element[::-1])
+> region = 'southwest'
+> print(region[::2])
+> print(region[::-1])
 > ~~~
 > {: .language-python}
 >
@@ -319,13 +319,13 @@ IndexError: string index out of range
 > > ## Solution
 > > The program prints
 > > ~~~
-> > furn
-> > eniroulf
+> > suhet
+> > tsewhtuos
 > > ~~~
 > > {: .language-python}
 > > 1. `stride` is the step size of the slice.
-> > 2. The slice `1::2` selects all even-numbered items from a collection: it starts
-> >    with element `1` (which is the second element, since indexing starts at `0`),
+> > 2. The slice `::2` selects all even-numbered items from a collection: it starts
+> >    with element `0` (which is the first element, since indexing starts at `0`),
 > >    goes on until the end (since no `end` is given), and uses a step size of `2`
 > >    (i.e., selects every second element).
 > {: .solution}
@@ -336,15 +336,15 @@ IndexError: string index out of range
 > What does the following program print?
 >
 > ~~~
-> element = 'lithium'
-> print(element[0:20])
-> print(element[-1:3])
+> product = 'insurance'
+> print(product[0:20])
+> print(product[-1:3])
 > ~~~
 > {: .language-python}
 >
 > > ## Solution
 > > ~~~
-> > lithium
+> > insurance
 > > 
 > > ~~~
 > > {: .output}
