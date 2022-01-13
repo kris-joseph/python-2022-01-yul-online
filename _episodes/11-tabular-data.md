@@ -30,43 +30,43 @@ keypoints:
 ~~~
 import pandas as pd
 
-data = pd.read_csv('data/gapminder_gdp_oceania.csv')
+data = pd.read_csv('insurance.csv')
 print(data)
 ~~~
 {: .language-python}
 ~~~
-       country  gdpPercap_1952  gdpPercap_1957  gdpPercap_1962  \
-0    Australia     10039.59564     10949.64959     12217.22686
-1  New Zealand     10556.57566     12247.39532     13175.67800
+      age     sex     bmi  children smoker     region      charges
+0      19  female  27.900         0    yes  southwest  16884.92400
+1      18    male  33.770         1     no  southeast   1725.55230
+2      28    male  33.000         3     no  southeast   4449.46200
+3      33    male  22.705         0     no  northwest  21984.47061
+4      32    male  28.880         0     no  northwest   3866.85520
+...   ...     ...     ...       ...    ...        ...          ...
+1333   50    male  30.970         3     no  northwest  10600.54830
+1334   18  female  31.920         0     no  northeast   2205.98080
+1335   18  female  36.850         0     no  southeast   1629.83350
+1336   21  female  25.800         0     no  southwest   2007.94500
+1337   61  female  29.070         0    yes  northwest  29141.36030
 
-   gdpPercap_1967  gdpPercap_1972  gdpPercap_1977  gdpPercap_1982  \
-0     14526.12465     16788.62948     18334.19751     19477.00928
-1     14463.91893     16046.03728     16233.71770     17632.41040
-
-   gdpPercap_1987  gdpPercap_1992  gdpPercap_1997  gdpPercap_2002  \
-0     21888.88903     23424.76683     26997.93657     30687.75473
-1     19007.19129     18363.32494     21050.41377     23189.80135
-
-   gdpPercap_2007
-0     34435.36744
-1     25185.00911
+[1338 rows x 7 columns]
 ~~~
 {: .output}
 
 *   The columns in a dataframe are the observed variables, and the rows are the observations.
-*   Pandas uses backslash `\` to show wrapped lines when output is too wide to fit the screen.
+*   In a case where the output is too wide to fit the screen (due to the number of columns), Pandas will use backslashes `\` to show wrapped lines.
 
 > ## File Not Found
 >
-> Our lessons store their data files in a `data` sub-directory,
-> which is why the path to the file is `data/gapminder_gdp_oceania.csv`.
-> If you forget to include `data/`,
-> or if you include it but your copy of the file is somewhere else,
-> you will get a [runtime error]({{ page.root }}/04-built-in/#runtime-error)
+> Our lessons store their data files in the same directory as the Python notebook, but this is not always the best practice.
+> Often, coders will keep data files in a separate subdirectory -- often called something like `data` -- in which case the path
+> to the file must indicate that Python needs to look in the subdirectory for the file.
+> If we were using a `data` subdirectory, we would have to use  `data/insurance.csv` as the argument for the `read_csv` method.
+> If you do not supply accurate information for Python to locate the data file,
+> you will get a [runtime error]({{ page.root }}/05-built-in/#runtime-error)
 > that ends with a line like this:
 >
 > ~~~
-> FileNotFoundError: [Errno 2] No such file or directory: 'data/gapminder_gdp_oceania.csv'
+> FileNotFoundError: [Errno 2] No such file or directory: 'data/insurance.csv'
 > ~~~
 > {: .error}
 {: .callout}
@@ -74,29 +74,30 @@ print(data)
 ## Use `index_col` to specify that a column's values should be used as row headings.
 
 *   Row headings are numbers (0 and 1 in this case).
-*   Really want to index by country.
+*   Let's say we want to index our data by the `region` column instead of relying on the row numbers from the first example.
 *   Pass the name of the column to `read_csv` as its `index_col` parameter to do this.
 
 ~~~
-data = pd.read_csv('data/gapminder_gdp_oceania.csv', index_col='country')
+data = pd.read_csv('insurance.csv', index_col='region')
 print(data)
 ~~~
 {: .language-python}
 ~~~
-             gdpPercap_1952  gdpPercap_1957  gdpPercap_1962  gdpPercap_1967  \
-country
-Australia       10039.59564     10949.64959     12217.22686     14526.12465
-New Zealand     10556.57566     12247.39532     13175.67800     14463.91893
+           age     sex     bmi  children smoker      charges
+region                                                      
+southwest   19  female  27.900         0    yes  16884.92400
+southeast   18    male  33.770         1     no   1725.55230
+southeast   28    male  33.000         3     no   4449.46200
+northwest   33    male  22.705         0     no  21984.47061
+northwest   32    male  28.880         0     no   3866.85520
+...        ...     ...     ...       ...    ...          ...
+northwest   50    male  30.970         3     no  10600.54830
+northeast   18  female  31.920         0     no   2205.98080
+southeast   18  female  36.850         0     no   1629.83350
+southwest   21  female  25.800         0     no   2007.94500
+northwest   61  female  29.070         0    yes  29141.36030
 
-             gdpPercap_1972  gdpPercap_1977  gdpPercap_1982  gdpPercap_1987  \
-country
-Australia       16788.62948     18334.19751     19477.00928     21888.88903
-New Zealand     16046.03728     16233.71770     17632.41040     19007.19129
-
-             gdpPercap_1992  gdpPercap_1997  gdpPercap_2002  gdpPercap_2007
-country
-Australia       23424.76683     26997.93657     30687.75473     34435.36744
-New Zealand     18363.32494     21050.41377     23189.80135     25185.00911
+[1338 rows x 6 columns]
 ~~~
 {: .output}
 
@@ -108,30 +109,27 @@ data.info()
 {: .language-python}
 ~~~
 <class 'pandas.core.frame.DataFrame'>
-Index: 2 entries, Australia to New Zealand
-Data columns (total 12 columns):
-gdpPercap_1952    2 non-null float64
-gdpPercap_1957    2 non-null float64
-gdpPercap_1962    2 non-null float64
-gdpPercap_1967    2 non-null float64
-gdpPercap_1972    2 non-null float64
-gdpPercap_1977    2 non-null float64
-gdpPercap_1982    2 non-null float64
-gdpPercap_1987    2 non-null float64
-gdpPercap_1992    2 non-null float64
-gdpPercap_1997    2 non-null float64
-gdpPercap_2002    2 non-null float64
-gdpPercap_2007    2 non-null float64
-dtypes: float64(12)
-memory usage: 208.0+ bytes
+Index: 1338 entries, southwest to northwest
+Data columns (total 6 columns):
+ #   Column    Non-Null Count  Dtype  
+---  ------    --------------  -----  
+ 0   age       1338 non-null   int64  
+ 1   sex       1338 non-null   object 
+ 2   bmi       1338 non-null   float64
+ 3   children  1338 non-null   int64  
+ 4   smoker    1338 non-null   object 
+ 5   charges   1338 non-null   float64
+dtypes: float64(2), int64(2), object(2)
+memory usage: 73.2+ KB
 ~~~
 {: .output}
 
 *   This is a `DataFrame`
-*   Two rows named `'Australia'` and `'New Zealand'`
-*   Twelve columns, each of which has two actual 64-bit floating point values.
+*   Four rows named `'southwest'`, `'southeast'`, `'northwestwest'`,and `'northeast'`
+*   Six columns, containing float, int, and object values.
     *   We will talk later about null values, which are used to represent missing observations.
-*   Uses 208 bytes of memory.
+    *   Why are only six columns? This is because we are using the seventh column (region) as the index
+*   Uses 73.2 kilobytes of memory.
 
 ## The `DataFrame.columns` variable stores information about the dataframe's columns.
 
@@ -145,10 +143,7 @@ print(data.columns)
 ~~~
 {: .language-python}
 ~~~
-Index(['gdpPercap_1952', 'gdpPercap_1957', 'gdpPercap_1962', 'gdpPercap_1967',
-       'gdpPercap_1972', 'gdpPercap_1977', 'gdpPercap_1982', 'gdpPercap_1987',
-       'gdpPercap_1992', 'gdpPercap_1997', 'gdpPercap_2002', 'gdpPercap_2007'],
-      dtype='object')
+Index(['age', 'sex', 'bmi', 'children', 'smoker', 'charges'], dtype='object')
 ~~~
 {: .output}
 
@@ -163,21 +158,43 @@ print(data.T)
 ~~~
 {: .language-python}
 ~~~
-country           Australia  New Zealand
-gdpPercap_1952  10039.59564  10556.57566
-gdpPercap_1957  10949.64959  12247.39532
-gdpPercap_1962  12217.22686  13175.67800
-gdpPercap_1967  14526.12465  14463.91893
-gdpPercap_1972  16788.62948  16046.03728
-gdpPercap_1977  18334.19751  16233.71770
-gdpPercap_1982  19477.00928  17632.41040
-gdpPercap_1987  21888.88903  19007.19129
-gdpPercap_1992  23424.76683  18363.32494
-gdpPercap_1997  26997.93657  21050.41377
-gdpPercap_2002  30687.75473  23189.80135
-gdpPercap_2007  34435.36744  25185.00911
+region    southwest  southeast southeast    northwest  northwest  southeast  \
+age              19         18        28           33         32         31   
+sex          female       male      male         male       male     female   
+bmi            27.9      33.77      33.0       22.705      28.88      25.74   
+children          0          1         3            0          0          0   
+smoker          yes         no        no           no         no         no   
+charges   16884.924  1725.5523  4449.462  21984.47061  3866.8552  3756.6216   
+
+region    southeast  northwest  northeast    northwest  ...    northeast  \
+age              46         37         37           60  ...           23   
+sex          female     female       male       female  ...       female   
+bmi           33.44      27.74      29.83        25.84  ...       24.225   
+children          1          3          2            0  ...            2   
+smoker           no         no         no           no  ...           no   
+charges   8240.5896  7281.5056  6406.4107  28923.13692  ...  22395.74424   
+
+region    southwest   southeast    southwest  southwest   northwest  \
+age              52          57           23         52          50   
+sex            male      female       female     female        male   
+bmi            38.6       25.74         33.4       44.7       30.97   
+children          2           2            0          3           3   
+smoker           no          no           no         no          no   
+charges   10325.206  12629.1656  10795.93733  11411.685  10600.5483   
+
+region    northeast  southeast southwest   northwest  
+age              18         18        21          61  
+sex          female     female    female      female  
+bmi           31.92      36.85      25.8       29.07  
+children          0          0         0           0  
+smoker           no         no        no         yes  
+charges   2205.9808  1629.8335  2007.945  29141.3603  
+
+[6 rows x 1338 columns]
 ~~~
 {: .output}
+
+* Note that Pandas is now using the backslash `\` to display columns across multiple rows
 
 ## Use `DataFrame.describe()` to get summary statistics about data.
 
@@ -188,64 +205,23 @@ print(data.describe())
 ~~~
 {: .language-python}
 ~~~
-       gdpPercap_1952  gdpPercap_1957  gdpPercap_1962  gdpPercap_1967  \
-count        2.000000        2.000000        2.000000        2.000000
-mean     10298.085650    11598.522455    12696.452430    14495.021790
-std        365.560078      917.644806      677.727301       43.986086
-min      10039.595640    10949.649590    12217.226860    14463.918930
-25%      10168.840645    11274.086022    12456.839645    14479.470360
-50%      10298.085650    11598.522455    12696.452430    14495.021790
-75%      10427.330655    11922.958888    12936.065215    14510.573220
-max      10556.575660    12247.395320    13175.678000    14526.124650
-
-       gdpPercap_1972  gdpPercap_1977  gdpPercap_1982  gdpPercap_1987  \
-count         2.00000        2.000000        2.000000        2.000000
-mean      16417.33338    17283.957605    18554.709840    20448.040160
-std         525.09198     1485.263517     1304.328377     2037.668013
-min       16046.03728    16233.717700    17632.410400    19007.191290
-25%       16231.68533    16758.837652    18093.560120    19727.615725
-50%       16417.33338    17283.957605    18554.709840    20448.040160
-75%       16602.98143    17809.077557    19015.859560    21168.464595
-max       16788.62948    18334.197510    19477.009280    21888.889030
-
-       gdpPercap_1992  gdpPercap_1997  gdpPercap_2002  gdpPercap_2007
-count        2.000000        2.000000        2.000000        2.000000
-mean     20894.045885    24024.175170    26938.778040    29810.188275
-std       3578.979883     4205.533703     5301.853680     6540.991104
-min      18363.324940    21050.413770    23189.801350    25185.009110
-25%      19628.685413    22537.294470    25064.289695    27497.598692
-50%      20894.045885    24024.175170    26938.778040    29810.188275
-75%      22159.406358    25511.055870    28813.266385    32122.777857
-max      23424.766830    26997.936570    30687.754730    34435.367440
+               age          bmi     children       charges
+count  1338.000000  1338.000000  1338.000000   1338.000000
+mean     39.207025    30.663397     1.094918  13270.422265
+std      14.049960     6.098187     1.205493  12110.011237
+min      18.000000    15.960000     0.000000   1121.873900
+25%      27.000000    26.296250     0.000000   4740.287150
+50%      39.000000    30.400000     1.000000   9382.033000
+75%      51.000000    34.693750     2.000000  16639.912515
+max      64.000000    53.130000     5.000000  63770.428010
 ~~~
 {: .output}
 
-*   Not particularly useful with just two records,
-    but very helpful when there are thousands.
-
-> ## Reading Other Data
->
-> Read the data in `gapminder_gdp_americas.csv`
-> (which should be in the same directory as `gapminder_gdp_oceania.csv`)
-> into a variable called `americas`
-> and display its summary statistics.
->
-> > ## Solution
-> > To read in a CSV, we use `pd.read_csv` and pass the filename `'data/gapminder_gdp_americas.csv'` to it.
-> > We also once again pass the column name `'country'` to the parameter `index_col` in order to index by country.
-> > The summary statistics can be displayed with the `DataFrame.describe()` method.
-> > ~~~
-> > americas = pd.read_csv('data/gapminder_gdp_americas.csv', index_col='country')
-> > americas.describe()
-> > ~~~
-> >{: .language-python}
-> {: .solution}
-{: .challenge}
+*   Note that Pandas uses floating point numbers for all of these statistics
 
 > ## Inspecting Data
 >
-> After reading the data for the Americas,
-> use `help(americas.head)` and `help(americas.tail)`
+> Use `help(data.head)` and `help(data.tail)`
 > to find out what `DataFrame.head` and `DataFrame.tail` do.
 >
 > 1.  What method call will display the first three rows of this data?
@@ -253,123 +229,62 @@ max      23424.766830    26997.936570    30687.754730    34435.367440
 >     (Hint: you may need to change your view of the data.)
 >
 > > ## Solution
-> > 1. We can check out the first five rows of `americas` by executing `americas.head()`
+> > 1. We can check out the first five rows of `data` by executing `data.head()`
 > >    (allowing us to view the head of the DataFrame). We can specify the number of rows we wish
 > >    to see by specifying the parameter `n` in our call
-> >    to `americas.head()`. To view the first three rows, execute:
+> >    to `data.head()`. To view the first three rows, execute:
 > >
 > >    ~~~
-> >    americas.head(n=3)
+> >    data.head(n=3)
 > >    ~~~
 > >    {: .language-python}
 > >    ~~~
-> >              continent  gdpPercap_1952  gdpPercap_1957  gdpPercap_1962  \
-> >    country
-> >    Argentina  Americas     5911.315053     6856.856212     7133.166023
-> >    Bolivia    Americas     2677.326347     2127.686326     2180.972546
-> >    Brazil     Americas     2108.944355     2487.365989     3336.585802
-> >
-> >               gdpPercap_1967  gdpPercap_1972  gdpPercap_1977  gdpPercap_1982  \
-> >    country
-> >    Argentina     8052.953021     9443.038526    10079.026740     8997.897412
-> >    Bolivia       2586.886053     2980.331339     3548.097832     3156.510452
-> >    Brazil        3429.864357     4985.711467     6660.118654     7030.835878
-> >
-> >               gdpPercap_1987  gdpPercap_1992  gdpPercap_1997  gdpPercap_2002  \
-> >    country
-> >    Argentina     9139.671389     9308.418710    10967.281950     8797.640716
-> >    Bolivia       2753.691490     2961.699694     3326.143191     3413.262690
-> >    Brazil        7807.095818     6950.283021     7957.980824     8131.212843
-> >
-> >               gdpPercap_2007
-> >    country
-> >    Argentina    12779.379640
-> >    Bolivia       3822.137084
-> >    Brazil        9065.800825
+> >     age sex bmi children    smoker  charges
+> > region                      
+> > southwest   19  female  27.90   0   yes 16884.9240
+> > southeast   18  male    33.77   1   no  1725.5523
+> > southeast   28  male    33.00   3   no  4449.4620
 > >    ~~~
 > >    {: .output}
-> > 2. To check out the last three rows of `americas`, we would use the command,
-> >    `americas.tail(n=3)`, analogous to `head()` used above. However, here we want to look at
+> > 2. To check out the last three rows of `data`, we would use the command,
+> >    `data.tail(n=3)`, analogous to `head()` used above. However, here we want to look at
 > >    the last three columns so we need to change our view and then use `tail()`. To do so, we
 > >     create a new DataFrame in which rows and columns are switched:
 > >
 > >    ~~~
-> >    americas_flipped = americas.T
+> >    data_flipped = data.T
 > >    ~~~
 > >    {: .language-python}
 > >
 > >    We can then view the last three columns of `americas` by viewing the last three rows
 > >    of `americas_flipped`:
 > >    ~~~
-> >    americas_flipped.tail(n=3)
+> >    data_flipped.tail(n=3)
 > >    ~~~
 > >    {: .language-python}
 > >    ~~~
-> >    country        Argentina  Bolivia   Brazil   Canada    Chile Colombia  \
-> >    gdpPercap_1997   10967.3  3326.14  7957.98  28954.9  10118.1  6117.36
-> >    gdpPercap_2002   8797.64  3413.26  8131.21    33329  10778.8  5755.26
-> >    gdpPercap_2007   12779.4  3822.14   9065.8  36319.2  13171.6  7006.58
-> >
-> >    country        Costa Rica     Cuba Dominican Republic  Ecuador    ...     \
-> >    gdpPercap_1997    6677.05  5431.99             3614.1  7429.46    ...
-> >    gdpPercap_2002    7723.45  6340.65            4563.81  5773.04    ...
-> >    gdpPercap_2007    9645.06   8948.1            6025.37  6873.26    ...
-> >
-> >    country          Mexico Nicaragua   Panama Paraguay     Peru Puerto Rico  \
-> >    gdpPercap_1997   9767.3   2253.02  7113.69   4247.4  5838.35     16999.4
-> >    gdpPercap_2002  10742.4   2474.55  7356.03  3783.67  5909.02     18855.6
-> >    gdpPercap_2007  11977.6   2749.32  9809.19  4172.84  7408.91     19328.7
-> >
-> >    country        Trinidad and Tobago United States  Uruguay Venezuela
-> >    gdpPercap_1997             8792.57       35767.4  9230.24   10165.5
-> >    gdpPercap_2002             11460.6       39097.1     7727   8605.05
-> >    gdpPercap_2007             18008.5       42951.7  10611.5   11415.8
+> >    region   southwest   southeast   southeast   northwest   northwest   southeast   southeast   northwest   northeast   northwest   ... northeast   southwest   southeast   southwest   southwest   northwest   northeast   southeast   southwest   northwest
+> > children    0   1   3   0   0   0   1   3   2   0   ... 2   2   2   0   3   3   0   0   0   0
+> > smoker  yes no  no  no  no  no  no  no  no  no  ... no  no  no  no  no  no  no  no  no  yes
+> > charges 16884.924   1725.5523   4449.462    21984.47061 3866.8552   3756.6216   8240.5896   7281.5056   6406.4107   28923.13692 ... 22395.74424 10325.206   12629.1656  10795.93733 11411.685   10600.5483  2205.9808   1629.8335   2007.945    29141.3603
+> > 3 rows × 1338 columns
 > >    ~~~
 > >    {: .output}
 > >    
 > >    This shows the data that we want, but we may prefer to display three columns instead of three rows,
 > >    so we can flip it back:
 > >    ~~~
-> >    americas_flipped.tail(n=3).T    
+> >    data_flipped.tail(n=3).T    
 > >    ~~~
 > >    {: .language-python}    
 > >    __Note:__ we could have done the above in a single line of code by 'chaining' the commands:
 > >    ~~~
-> >    americas.T.tail(n=3).T
+> >    data.T.tail(n=3).T
 > >    ~~~
 > >    {: .language-python}
 > {: .solution}
 {: .challenge}
 
-
-> ## Reading Files in Other Directories
->
-> The data for your current project is stored in a file called `microbes.csv`,
-> which is located in a folder called `field_data`.
-> You are doing analysis in a notebook called `analysis.ipynb`
-> in a sibling folder called `thesis`:
->
-> ~~~
-> your_home_directory
-> +-- field_data/
-> |   +-- microbes.csv
-> +-- thesis/
->     +-- analysis.ipynb
-> ~~~
-> {: .output}
->
-> What value(s) should you pass to `read_csv` to read `microbes.csv` in `analysis.ipynb`?
-> 
-> > ## Solution
-> > We need to specify the path to the file of interest in the call to `pd.read_csv`. We first need to 'jump' out of
-> > the folder `thesis` using '../' and then into the folder `field_data` using 'field_data/'. Then we can specify the filename `microbes.csv.
-> > The result is as follows:
-> > ~~~
-> > data_microbes = pd.read_csv('../field_data/microbes.csv')
-> > ~~~
-> >{: .language-python}
-> {: .solution}
-{: .challenge}
 
 > ## Writing Data
 > 
@@ -379,17 +294,17 @@ max      23424.766830    26997.936570    30687.754730    34435.367440
 > write one of your dataframes to a file called `processed.csv`.
 > You can use `help` to get information on how to use `to_csv`.
 > > ## Solution
-> > In order to write the DataFrame `americas` to a file called `processed.csv`, execute the following command:
+> > In order to write the DataFrame `data` to a file called `processed.csv`, execute the following command:
 > > ~~~
-> > americas.to_csv('processed.csv')
+> > data.to_csv('processed.csv')
 > > ~~~
 > >{: .language-python}
 > > For help on `to_csv`, you could execute, for example:
 > > ~~~
-> > help(americas.to_csv)
+> > help(data.to_csv)
 > > ~~~
 > >{: .language-python}
 > > Note that `help(to_csv)` throws an error! This is a subtlety and is due to the fact that `to_csv` is NOT a function in 
-> > and of itself and the actual call is `americas.to_csv`. 
+> > and of itself and the actual call is `data.to_csv`. 
 > {: .solution}
 {: .challenge}

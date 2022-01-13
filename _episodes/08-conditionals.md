@@ -441,3 +441,11 @@ final velocity: 30.0
 > `apply()` to do what it says, apply the `calculate_life_quartile` to the
 > value of this column for every row in the dataframe.
 {: .callout}
+
+## Your assignment
+
+For next class, complete the following exercise:
+
+Use what you've learned to write a script that reads the insurance cost data from `insurance,csv` and prints out a table of summary statistics for the BMI column: include the minimum value, maximum value, median, and average.
+
+**Hint**: You can use your assignment from last class as a starting point. How can you put all of the BMI values into a list? Once you have the list, what built-in methods are available for calculating results?
