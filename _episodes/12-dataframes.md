@@ -44,89 +44,97 @@ uniquely identifies its *entry* in the DataFrame.
 *   Can specify location by numerical index analogously to 2D version of character selection in strings.
 
 ~~~
+# import the Pandas library and read data from the insurance.csv file
 import pandas as pd
-data = pd.read_csv('data/gapminder_gdp_europe.csv', index_col='country')
+data = pd.read_csv('insurance.csv')
+
+# Output the first three rows of data
+print(data.head(n=3))
+
+# Output the data in row 0, column 0
 print(data.iloc[0, 0])
 ~~~
 {: .language-python}
 ~~~
-1601.056136
+19
 ~~~
 {: .output}
+
+* Remember that Pandas automatically uses the first row of a CSV file to determine the names for data columns
+* Since Python counts rows and columns starting at 0, location `[0, 0]` is the data in the first column of the first row: 19
 
 ## Use `DataFrame.loc[..., ...]` to select values by their (entry) label.
 
-*   Can specify location by row name analogously to 2D version of dictionary keys.
+*   You can also specify location by column and/or row name, in a similar way using dictionary keys.
 
 ~~~
-print(data.loc["Albania", "gdpPercap_1952"])
+print(data.loc[0 "smoker"])
 ~~~
 {: .language-python}
 ~~~
-1601.056136
+yes
 ~~~
 {: .output}
+
+*   In our data set the rows are numbered instead of indexed, so we specify the row of interest with an index number, and specify the data point of interest by providing the column name.
+
 ## Use `:` on its own to mean all columns or all rows.
 
 *   Just like Python's usual slicing notation.
 
 ~~~
-print(data.loc["Albania", :])
+print(data.loc[3, :])
 ~~~
 {: .language-python}
 ~~~
-gdpPercap_1952    1601.056136
-gdpPercap_1957    1942.284244
-gdpPercap_1962    2312.888958
-gdpPercap_1967    2760.196931
-gdpPercap_1972    3313.422188
-gdpPercap_1977    3533.003910
-gdpPercap_1982    3630.880722
-gdpPercap_1987    3738.932735
-gdpPercap_1992    2497.437901
-gdpPercap_1997    3193.054604
-gdpPercap_2002    4604.211737
-gdpPercap_2007    5937.029526
-Name: Albania, dtype: float64
+age                  33
+sex                male
+bmi              22.705
+children              0
+smoker               no
+region        northwest
+charges     21984.47061
+Name: 3, dtype: object
 ~~~
 {: .output}
 
-*   Would get the same result printing `data.loc["Albania"]` (without a second index).
+*   Would get the same result as printing `data.loc[3, :]` by printing `data.loc[3]` (without a second index).
 
 ~~~
-print(data.loc[:, "gdpPercap_1952"])
+print(data.loc[:, "smoker"])
 ~~~
 {: .language-python}
 ~~~
-country
-Albania                    1601.056136
-Austria                    6137.076492
-Belgium                    8343.105127
-⋮ ⋮ ⋮
-Switzerland               14734.232750
-Turkey                     1969.100980
-United Kingdom             9979.508487
-Name: gdpPercap_1952, dtype: float64
+0       yes
+1        no
+2        no
+3        no
+4        no
+       ... 
+1333     no
+1334     no
+1335     no
+1336     no
+1337    yes
+Name: smoker, Length: 1338, dtype: object
 ~~~
 {: .output}
 
-*   Would get the same result printing `data["gdpPercap_1952"]`
-*   Also get the same result printing `data.gdpPercap_1952` (not recommended, because easily confused with `.` notation for methods)
+*   You would get the same result printing `data["smoker"]`
+*   You also get the same result printing `data.smoker` (but this is not recommended because it is easily confused with the `.` notation for methods)
 
 ## Select multiple columns or rows using `DataFrame.loc` and a named slice.
 
 ~~~
-print(data.loc['Italy':'Poland', 'gdpPercap_1962':'gdpPercap_1972'])
+print(data.loc[0:5, 'smoker':'charges'])
 ~~~
 {: .language-python}
 ~~~
-             gdpPercap_1962  gdpPercap_1967  gdpPercap_1972
-country
-Italy           8243.582340    10022.401310    12269.273780
-Montenegro      4649.593785     5907.850937     7778.414017
-Netherlands    12790.849560    15363.251360    18794.745670
-Norway         13450.401510    16361.876470    18965.055510
-Poland          5338.752143     6557.152776     8006.506993
+  smoker     region      charges
+2     no  southeast   4449.46200
+3     no  northwest  21984.47061
+4     no  northwest   3866.85520
+5     no  southeast   3756.62160
 ~~~
 {: .output}
 
@@ -137,31 +145,29 @@ everything up to but not including the final index.
 
 ## Result of slicing can be used in further operations.
 
-*   Usually don't just print a slice.
+*   Usually, we want to do more than just print out the contents of a slice.
 *   All the statistical operators that work on entire dataframes
     work the same way on slices.
-*   E.g., calculate max of a slice.
+*   For example, let's calculate maximum value within a slice.
 
 ~~~
-print(data.loc['Italy':'Poland', 'gdpPercap_1962':'gdpPercap_1972'].max())
+print(data.loc[100:500, 'bmi':'children'].max())
 ~~~
 {: .language-python}
 ~~~
-gdpPercap_1962    13450.40151
-gdpPercap_1967    16361.87647
-gdpPercap_1972    18965.05551
+bmi         49.06
+children     5.00
 dtype: float64
 ~~~
 {: .output}
 
 ~~~
-print(data.loc['Italy':'Poland', 'gdpPercap_1962':'gdpPercap_1972'].min())
+print(data.loc[100:500, 'bmi':'children'].min())
 ~~~
 {: .language-python}
 ~~~
-gdpPercap_1962    4649.593785
-gdpPercap_1967    5907.850937
-gdpPercap_1972    7778.414017
+bmi         15.96
+children     0.00
 dtype: float64
 ~~~
 {: .output}
@@ -173,31 +179,61 @@ dtype: float64
 
 ~~~
 # Use a subset of data to keep output readable.
-subset = data.loc['Italy':'Poland', 'gdpPercap_1962':'gdpPercap_1972']
+subset = data.loc[0:20, 'bmi':'children']
 print('Subset of data:\n', subset)
 
-# Which values were greater than 10000 ?
-print('\nWhere are values large?\n', subset > 10000)
+# Which values were greater than 20000 ?
+print('\nWhere are values large?\n', subset > 30)
 ~~~
 {: .language-python}
 ~~~
 Subset of data:
-             gdpPercap_1962  gdpPercap_1967  gdpPercap_1972
-country
-Italy           8243.582340    10022.401310    12269.273780
-Montenegro      4649.593785     5907.850937     7778.414017
-Netherlands    12790.849560    15363.251360    18794.745670
-Norway         13450.401510    16361.876470    18965.055510
-Poland          5338.752143     6557.152776     8006.506993
+        bmi  children
+0   27.900         0
+1   33.770         1
+2   33.000         3
+3   22.705         0
+4   28.880         0
+5   25.740         0
+6   33.440         1
+7   27.740         3
+8   29.830         2
+9   25.840         0
+10  26.220         0
+11  26.290         0
+12  34.400         0
+13  39.820         0
+14  42.130         0
+15  24.600         1
+16  30.780         1
+17  23.845         0
+18  40.300         0
+19  35.300         0
+20  36.005         0
 
 Where are values large?
-            gdpPercap_1962 gdpPercap_1967 gdpPercap_1972
-country
-Italy                False           True           True
-Montenegro           False          False          False
-Netherlands           True           True           True
-Norway                True           True           True
-Poland               False          False          False
+       bmi  children
+0   False     False
+1    True     False
+2    True     False
+3   False     False
+4   False     False
+5   False     False
+6    True     False
+7   False     False
+8   False     False
+9   False     False
+10  False     False
+11  False     False
+12   True     False
+13   True     False
+14   True     False
+15  False     False
+16   True     False
+17  False     False
+18   True     False
+19   True     False
+20   True     False
 ~~~
 {: .output}
 
@@ -206,38 +242,53 @@ Poland               False          False          False
 *   A frame full of Booleans is sometimes called a *mask* because of how it can be used.
 
 ~~~
-mask = subset > 10000
+mask = subset > 30
 print(subset[mask])
 ~~~
 {: .language-python}
 ~~~
-             gdpPercap_1962  gdpPercap_1967  gdpPercap_1972
-country
-Italy                   NaN     10022.40131     12269.27378
-Montenegro              NaN             NaN             NaN
-Netherlands     12790.84956     15363.25136     18794.74567
-Norway          13450.40151     16361.87647     18965.05551
-Poland                  NaN             NaN             NaN
+       bmi  children
+0      NaN       NaN
+1   33.770       NaN
+2   33.000       NaN
+3      NaN       NaN
+4      NaN       NaN
+5      NaN       NaN
+6   33.440       NaN
+7      NaN       NaN
+8      NaN       NaN
+9      NaN       NaN
+10     NaN       NaN
+11     NaN       NaN
+12  34.400       NaN
+13  39.820       NaN
+14  42.130       NaN
+15     NaN       NaN
+16  30.780       NaN
+17     NaN       NaN
+18  40.300       NaN
+19  35.300       NaN
+20  36.005       NaN
 ~~~
 {: .output}
 
-*   Get the value where the mask is true, and NaN (Not a Number) where it is false.
-*   Useful because NaNs are ignored by operations like max, min, average, etc.
+*   In the output, the value appears where the mask is true, and NaN (Not a Number) apears where it is false.
+*   This is useful because NaNs are ignored by operations like max, min, average, etc.
 
 ~~~
-print(subset[subset > 10000].describe())
+print(subset[subset > 30].describe())
 ~~~
 {: .language-python}
 ~~~
-       gdpPercap_1962  gdpPercap_1967  gdpPercap_1972
-count        2.000000        3.000000        3.000000
-mean     13120.625535    13915.843047    16676.358320
-std        466.373656     3408.589070     3817.597015
-min      12790.849560    10022.401310    12269.273780
-25%      12955.737547    12692.826335    15532.009725
-50%      13120.625535    15363.251360    18794.745670
-75%      13285.513523    15862.563915    18879.900590
-max      13450.401510    16361.876470    18965.055510
+             bmi  children
+count  10.000000       0.0
+mean   35.894500       NaN
+std     3.672313       NaN
+min    30.780000       NaN
+25%    33.522500       NaN
+50%    34.850000       NaN
+75%    38.866250       NaN
+max    42.130000       NaN["smoker"]
 ~~~
 {: .output}
 
