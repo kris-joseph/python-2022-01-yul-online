@@ -140,6 +140,9 @@ with open ("insurance.csv") as f:
     for line in f:
 # 4
         childCount = line.split(",")[3]
+        childCount = int(childCount) # Python will interpret the data as a string, so we have to change its type!
+
+        # childCount = int(line.split(",")[3]) # This is a way to do the previous two lines together
 # 5    
         if childCount == 0 :
             childCountTally_0 += 1
@@ -197,7 +200,7 @@ with open ("insurance.csv") as fr:              # Note how we have used a new va
                                                    # We use a different variable, 'fw'.
         for line in fr:
 # 2    
-            if line.split(",")[3] == 3 :
+            if line.split(",")[3] == '3' :          # Data is read as a string, so we have to test as a string by using quotes
                 fw.write(line)
 
 ~~~
@@ -206,7 +209,7 @@ with open ("insurance.csv") as fr:              # Note how we have used a new va
 What are we  doing here?
 
 1. Open the files. Because there are now two files, each has its own file handle: `fr` for the file we read and `fw` for the file we are going to write. (They are just variable names so you can use anything you like). For the file we are going to write to we use `w` for the second parameter. If the file does not exist it will be created. If it does exist, then the contents will be overwritten. If we want to append to an existing file we can use `a` as the second parameter.
-2. Because we are just testing a specific field from the record to have a certain value, we don't need to put it into a variable first. If the expression is True (meaning "if the value for the `children` data is equal to 3"), then we use `write()` method to write the complete line just as we read it to the output file.
+2. Because we are just testing a specific field from the record to have a certain value, we don't need to put it into a variable first. If the expression is True (meaning "if the value for the `children` data is equal to 3"), then we use `write()` method to write the complete line just as we read it to the output file. Note that Python reads the data from the file as the string type, so we use quotes to indicate that we want to test against `str(3)` and not `int(3)`
 
 In this example we didn't bother skipping the header line because would fail the test in the if statement. If we did want to include it we could have added the line
 
