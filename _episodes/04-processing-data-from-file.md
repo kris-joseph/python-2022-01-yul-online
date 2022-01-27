@@ -95,12 +95,12 @@ As we read the file the line variable is a string containing a complete record. 
 As line is a string we can use the `split()` method to convert it to a list of column values. We are specifically going to select the column which is the 4th entry in the list (remember the list index starts at 0). This refers to the `children` column. We are going to examine the data about the number of children associated with each person in the file.
 
 ~~~
-with open ("SAFI_results.csv") as f:  # Open the file and assign it to a variable called 'f'.
+with open ("insurance.csv") as f:  # Open the file and assign it to a variable called 'f'.
                                       # Indent the code to keep the file open. Stop indenting to close.
     f.readline()                      # First line is a header so ignore it.
 
     for line in f:
-        print(line.split(",")[3])    # Index 18, the 19th column is C01_respondent_roof_type.
+        print(line.split(",")[3])    # Index 3, the 4th column is 'children'.
 
 ~~~
 {: .language-python}
@@ -120,7 +120,7 @@ with open ("SAFI_results.csv") as f:  # Open the file and assign it to a variabl
 
 Having a list of the number of children from all of the records is one thing, but it is more likely that we would want a histogram or tally of this data. By scanning up and down the previous output, there appears to be a maximum of 5 children for any one person, but we will play safe and assume there may be more.
 
-### Step 3 - Use Pythong to tally the records for each posible number of children
+### Step 3 - Use Python to tally the records for each posible number of children
 
 ~~~
 # 1
@@ -183,7 +183,9 @@ What are we doing here?
 5. Increment the appropriate variable
 6. Print out the results (we have stopped indenting so the file will be closed)
 
-Instead of printing out the counts of each number of children, you may want to extract the records for people with a certain number of children to a separate file. Let us assume we want all of the records for people with three children to be written to a file.
+Before moving on: note that the code above is functional, but not very elegant. Experienced coders would say there are far more efficient ways of doing this kind of data processing with Python code, and that is true. However, this code *works* and it is easy to understand, and that is terrific for anyone who is new to coding.
+
+Now, instead of printing out the counts of each number of children, you may want to extract the records for people with a certain number of children to a separate file. Let us assume we want all of the records for people with three children to be written to a file.
 
 ~~~
 # 1
@@ -204,9 +206,9 @@ with open ("insurance.csv") as fr:              # Note how we have used a new va
 What are we  doing here?
 
 1. Open the files. Because there are now two files, each has its own file handle: `fr` for the file we read and `fw` for the file we are going to write. (They are just variable names so you can use anything you like). For the file we are going to write to we use `w` for the second parameter. If the file does not exist it will be created. If it does exist, then the contents will be overwritten. If we want to append to an existing file we can use `a` as the second parameter.
-2. Because we are just testing a specific field from the record to have a certain value, we don't need to put it into a variable first. If the expression is True, then we use `write()` method to write the complete line just as we read it to the output file.
+2. Because we are just testing a specific field from the record to have a certain value, we don't need to put it into a variable first. If the expression is True (meaning "if the value for the `children` data is equal to 3"), then we use `write()` method to write the complete line just as we read it to the output file.
 
-In this example we didn't bother skipping the header line as it would fail the test in the if statement. If we did want to include it we could have added the line
+In this example we didn't bother skipping the header line because would fail the test in the if statement. If we did want to include it we could have added the line
 
 ~~~
 fw.write(fr.readline())
@@ -217,7 +219,7 @@ before the for loop
 
 > ## Exercise
 >
-> From the insurance.csv file extract all of the records where the `smoker` field (index 4) has a value of `'no'` and the `region` (index 5) has a value of `'southeast'` and write them to a file. Within the same program write all of the records where `smoker` (index 4) has a value of `'no'` and the `region` (index 19) has a value of `'northwest'` and write them to a separate file. In both files include the header record.
+> From the insurance.csv file extract all of the records where the `smoker` field (index 4) has a value of `'no'` and the `region` (index 5) has a value of `'southeast'` and write them to a file. Within the same program write all of the records where `smoker` (index 4) has a value of `'no'` and the `region` (index 5) has a value of `'northwest'` and write them to a separate file. In both files include the header record.
 >
 > > ## Solution
 > >
@@ -248,7 +250,7 @@ before the for loop
 In our example of printing the tallies for the number of children, we assumed that we knew what all the possible values were. Had there been any entries higher than 5 we would still be none the wiser. We were able to decide on the possible values for the `'children'` column by manually scanning the list of values. This was only practical because of the small file size. For a multi-million record file we could not have done this.
 
 
-Let's say we would like a way of creating a list of the different regions wihtout having to check the data file for all of the possible values first. We can do this by using a special Python structure called a *dictionary*.
+Let's say we would like a way of creating a list of the different regions without having to check the data file for all of the possible values first. We can do this by using a special Python structure called a *dictionary*.
 
 
 
@@ -342,7 +344,7 @@ already exists
 > > # 3
 > > key = 'childCount_3'
 > > if key in dict_childCountTallies :
-> >     dict_childCountTallies[key] += 1
+> >     dict_childCountTallies[key] += 1 # this "+=" operator gives the same result as "dict_childCountTallies[key] = dict_childCountTallies[key] + 1"
 > > else :
 > >     dict_childCountTallies[key] = 1
 > >
