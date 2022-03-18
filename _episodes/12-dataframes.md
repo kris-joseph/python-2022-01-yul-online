@@ -581,11 +581,6 @@ dtype: int64
 > {: .solution}
 {: .challenge}
 
-## Additional Resources
-
-[pandas-dataframe]: https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html
-[pandas-series]: https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html
-[numpy]: http://www.numpy.org/
 
 ## Your assignment
 
@@ -594,3 +589,8 @@ For next class, complete the following exercise:
 Use what you've learned to write a script that uses the Pandas library to reads the insurance cost data from `insurance.csv` and outputs summary statistics for data in the 'BMI' column, grouped by smokers and non-smokers. Include the minimum value, maximum value, median, and average.
 
 **Hint**: The Pandas library is probably more helpful than your code from the previous assignment. Look at the examples in this episode to piece your code together!
+
+
+[pandas-dataframe]: https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html
+[pandas-series]: https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html
+[numpy]: http://www.numpy.org/
