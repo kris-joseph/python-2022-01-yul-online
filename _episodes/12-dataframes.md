@@ -295,83 +295,65 @@ max    42.130000       NaN["smoker"]
 ## Group By: split-apply-combine
 
 Pandas vectorizing methods and grouping operations are features that provide users 
-much flexibility to analyse their data.
+much flexibility to analyse their data. Often, we want to process data this way:
+1. Split the data into groups by selecting elements that meet some criteria
+2. Apply a function to each group (for example, calculate a sum; perform a count; do staistical operations)
+3. Combine the results into a data structure
 
-For instance, let's say we want to have a clearer view on how the European countries 
-split themselves according to their GDP.
+For instance, let's say we want to do a tally of how many patients in each region have more than 3 children.
 
-1.  We may have a glance by splitting the countries in two groups during the years surveyed,
-    those who presented a GDP *higher* than the European average and those with a *lower* GDP.
-2.  We then estimate a *wealthy score* based on the historical (from 1962 to 2007) values,
-    where we account how many times a country has participated in the groups of *lower* or *higher* GDP
+First, we'll use the "mask" technique to filter out all of the data where the number of children is 3 or less:
 
 ~~~
-mask_higher = data > data.mean()
-wealth_score = mask_higher.aggregate('sum', axis=1) / len(data.columns)
-wealth_score
+mask_moreThanThreeChildren = data.loc[:,"children"] > 3
+print(mask_moreThanThreeChildren)
 ~~~
 {: .language-python}
 ~~~
-country
-Albania                   0.000000
-Austria                   1.000000
-Belgium                   1.000000
-Bosnia and Herzegovina    0.000000
-Bulgaria                  0.000000
-Croatia                   0.000000
-Czech Republic            0.500000
-Denmark                   1.000000
-Finland                   1.000000
-France                    1.000000
-Germany                   1.000000
-Greece                    0.333333
-Hungary                   0.000000
-Iceland                   1.000000
-Ireland                   0.333333
-Italy                     0.500000
-Montenegro                0.000000
-Netherlands               1.000000
-Norway                    1.000000
-Poland                    0.000000
-Portugal                  0.000000
-Romania                   0.000000
-Serbia                    0.000000
-Slovak Republic           0.000000
-Slovenia                  0.333333
-Spain                     0.333333
-Sweden                    1.000000
-Switzerland               1.000000
-Turkey                    0.000000
-United Kingdom            1.000000
-dtype: float64
+0       False
+1       False
+2       False
+3       False
+4       False
+        ...  
+1333    False
+1334    False
+1335    False
+1336    False
+1337    False
+Name: children, Length: 1338, dtype: bool
 ~~~
 {: .output}
 
-Finally, for each group in the `wealth_score` table, we sum their (financial) contribution
-across the years surveyed using chained methods:
+Not many people will have 4+ children, so the we expect to see a lot of "False" results in the data. 
+
+Next, we want to group this data by region so we can count how many people in each region have at least 4 kids.
+
+Pandas provides a powerful "groupby" function that will help us do this. If we pass it the "region" column name, it will create one group for each of the unique values in the column. We have a northeast, northwest, southeast, and southwest region, so we would expect to see four groups.
+
+We can count how many elements have been placed into each group using a built-in size() function. 
+
+Putting this all together, we will do as follows by chaining together commands:
+1. use the mask to create a subset of our data, listing only those people with more than three children
+2. use groupby() to create one group of records for each region
+3. use size() to see how large each group is (i.e. how many records there are)
 
 ~~~
-data.groupby(wealth_score).sum()
+grouped = data[mask_moreThanThreeChildren].groupby("region").size()
+print(grouped)
+
+# We can also avoid using a variable and write print(data.groupby("region").size())
 ~~~
 {: .language-python}
+
 ~~~
-          gdpPercap_1952  gdpPercap_1957  gdpPercap_1962  gdpPercap_1967  \
-0.000000    36916.854200    46110.918793    56850.065437    71324.848786   
-0.333333    16790.046878    20942.456800    25744.935321    33567.667670   
-0.500000    11807.544405    14505.000150    18380.449470    21421.846200   
-1.000000   104317.277560   127332.008735   149989.154201   178000.350040   
+region
+northeast    10
+northwest     7
+southeast    11
+southwest    15
+dtype: int64
 
-          gdpPercap_1972  gdpPercap_1977  gdpPercap_1982  gdpPercap_1987  \
-0.000000    88569.346898   104459.358438   113553.768507   119649.599409   
-0.333333    45277.839976    53860.456750    59679.634020    64436.912960   
-0.500000    25377.727380    29056.145370    31914.712050    35517.678220   
-1.000000   215162.343140   241143.412730   263388.781960   296825.131210   
-
-          gdpPercap_1992  gdpPercap_1997  gdpPercap_2002  gdpPercap_2007  
-0.000000    92380.047256   103772.937598   118590.929863   149577.357928  
-0.333333    67918.093220    80876.051580   102086.795210   122803.729520  
-0.500000    36310.666080    40723.538700    45564.308390    51403.028210  
-1.000000   315238.235970   346930.926170   385109.939210   427850.333420
 ~~~
 {: .output}
 
@@ -379,180 +361,36 @@ data.groupby(wealth_score).sum()
 > ## Selection of Individual Values
 >
 > Assume Pandas has been imported into your notebook
-> and the Gapminder GDP data for Europe has been loaded:
+> and the insurance data has been loaded:
 >
 > ~~~
 > import pandas as pd
 >
-> df = pd.read_csv('data/gapminder_gdp_europe.csv', index_col='country')
+> df = pd.read_csv('insurance.csv')
 > ~~~
 > {: .language-python}
 >
-> Write an expression to find the Per Capita GDP of Serbia in 2007.
+> Write an expression to find the average charge for all smokers according to sex.
 > > ## Solution
-> > The selection can be done by using the labels for both the row ("Serbia") and the column ("gdpPercap_2007"):
+> > The selection can be done by "masking" for smokers, grouping by sex, and then calculating the mean. :
 > > ~~~
-> > print(df.loc['Serbia', 'gdpPercap_2007'])
+> > mask_smokers = df.loc[:,"smoker"] == 'yes'
+> > grouped = df[mask_smokers].groupby("sex")
+> > averages = grouped.mean()
+> > print(averages.loc[:,"charges"])
 > > ~~~
 > > {: .language-python}
 > > The output is
 > > ~~~
-> > 9786.534714
+> > sex
+> > female    30678.996276
+> > male      33042.005975
+> > Name: charges, dtype: float64
 > > ~~~
 > >{: .output}
 > {: .solution}
 {: .challenge}
 
-> ## Extent of Slicing
->
-> 1.  Do the two statements below produce the same output?
-> 2.  Based on this,
->     what rule governs what is included (or not) in numerical slices and named slices in Pandas?
-> 
-> ~~~
-> print(df.iloc[0:2, 0:2])
-> print(df.loc['Albania':'Belgium', 'gdpPercap_1952':'gdpPercap_1962'])
-> ~~~
-> {: .language-python}
-> 
-> > ## Solution
-> > No, they do not produce the same output! The output of the first statement is:
-> > ~~~
-> >         gdpPercap_1952  gdpPercap_1957
-> > country                                
-> > Albania     1601.056136     1942.284244
-> > Austria     6137.076492     8842.598030
-> > ~~~
-> >{: .output}
-> > The second statement gives:
-> > ~~~
-> >         gdpPercap_1952  gdpPercap_1957  gdpPercap_1962
-> > country                                                
-> > Albania     1601.056136     1942.284244     2312.888958
-> > Austria     6137.076492     8842.598030    10750.721110
-> > Belgium     8343.105127     9714.960623    10991.206760
-> > ~~~
-> >{: .output}
-> > Clearly, the second statement produces an additional column and an additional row compared to the first statement.  
-> > What conclusion can we draw? We see that a numerical slice, 0:2, *omits* the final index (i.e. index 2)
-> > in the range provided,
-> > while a named slice, 'gdpPercap_1952':'gdpPercap_1962', *includes* the final element.
-> {: .solution}
-{: .challenge}
-
-> ## Reconstructing Data
->
-> Explain what each line in the following short program does:
-> what is in `first`, `second`, etc.?
->
-> ~~~
-> first = pd.read_csv('data/gapminder_all.csv', index_col='country')
-> second = first[first['continent'] == 'Americas']
-> third = second.drop('Puerto Rico')
-> fourth = third.drop('continent', axis = 1)
-> fourth.to_csv('result.csv')
-> ~~~
-> {: .language-python}
->
-> > ## Solution
-> > Let's go through this piece of code line by line.
-> > ~~~
-> > first = pd.read_csv('data/gapminder_all.csv', index_col='country')
-> > ~~~
-> > {: .language-python}
-> > This line loads the dataset containing the GDP data from all countries into a dataframe called 
-> > `first`. The `index_col='country'` parameter selects which column to use as the 
-> > row labels in the dataframe.  
-> > ~~~
-> > second = first[first['continent'] == 'Americas']
-> > ~~~
-> > {: .language-python}
-> > This line makes a selection: only those rows of `first` for which the 'continent' column matches 
-> > 'Americas' are extracted. Notice how the Boolean expression inside the brackets, 
-> > `first['continent'] == 'Americas'`, is used to select only those rows where the expression is true. 
-> > Try printing this expression! Can you print also its individual True/False elements? 
-> > (hint: first assign the expression to a variable)
-> > ~~~
-> > third = second.drop('Puerto Rico')
-> > ~~~
-> > {: .language-python}
-> > As the syntax suggests, this line drops the row from `second` where the label is 'Puerto Rico'. The 
-> > resulting dataframe `third` has one row less than the original dataframe `second`.
-> > ~~~
-> > fourth = third.drop('continent', axis = 1)
-> > ~~~
-> > {: .language-python}
-> > Again we apply the drop function, but in this case we are dropping not a row but a whole column. 
-> > To accomplish this, we need to specify also the `axis` parameter (we want to drop the second column 
-> > which has index 1).
-> > ~~~
-> > fourth.to_csv('result.csv')
-> > ~~~
-> > {: .language-python}
-> > The final step is to write the data that we have been working on to a csv file. Pandas makes this easy 
-> > with the `to_csv()` function. The only required argument to the function is the filename. Note that the 
-> > file will be written in the directory from which you started the Jupyter or Python session.
-> {: .solution}
-{: .challenge}
-
-> ## Selecting Indices
->
-> Explain in simple terms what `idxmin` and `idxmax` do in the short program below.
-> When would you use these methods?
->
-> ~~~
-> data = pd.read_csv('data/gapminder_gdp_europe.csv', index_col='country')
-> print(data.idxmin())
-> print(data.idxmax())
-> ~~~
-> {: .language-python}
->
-> > ## Solution
-> > For each column in `data`, `idxmin` will return the index value corresponding to each column's minimum;
-> > `idxmax` will do accordingly the same for each column's maximum value.
-> >
-> > You can use these functions whenever you want to get the row index of the minimum/maximum value and not the actual minimum/maximum value.
-> {: .solution}
-{: .challenge}
-
-> ## Practice with Selection
->
-> Assume Pandas has been imported and the Gapminder GDP data for Europe has been loaded.
-> Write an expression to select each of the following:
->
-> 1.  GDP per capita for all countries in 1982.
-> 2.  GDP per capita for Denmark for all years.
-> 3.  GDP per capita for all countries for years *after* 1985.
-> 4.  GDP per capita for each country in 2007 as a multiple of 
->     GDP per capita for that country in 1952.
->
-> > ## Solution
-> > 1:
-> > ~~~
-> > data['gdpPercap_1982']
-> > ~~~
-> > {: .language-python}
-> >
-> > 2:
-> > ~~~
-> > data.loc['Denmark',:]
-> > ~~~
-> > {: .language-python}
-> >
-> > 3:
-> > ~~~
-> > data.loc[:,'gdpPercap_1985':]
-> > ~~~
-> > {: .language-python}
-> > Pandas is smart enough to recognize the number at the end of the column label and does not give you an error, although no column named `gdpPercap_1985` actually exists. This is useful if new columns are added to the CSV file later.
-> >
-> > 4:
-> > ~~~
-> > data['gdpPercap_2007']/data['gdpPercap_1952']
-> > ~~~
-> > {: .language-python}
-> {: .solution}
-{: .challenge}
 
 > ## Many Ways of Access
 >
@@ -731,7 +569,7 @@ data.groupby(wealth_score).sum()
 >
 > You can use `help()` or <kbd>Shift</kbd>+<kbd>Tab</kbd> to get more information about what these methods do.
 >
-> Assume Pandas has been imported and the Gapminder GDP data for Europe has been loaded as `data`.  Then, use `dir()` 
+> Assume Pandas has been imported and the insurance data has been loaded as `data`.  Then, use `dir()` 
 > to find the function that prints out the median per-capita GDP across all European countries for each year that information is available.
 >
 > > ## Solution
@@ -743,14 +581,6 @@ data.groupby(wealth_score).sum()
 > {: .solution}
 {: .challenge}
 
-
-> ## Interpretation
->
-> Poland's borders have been stable since 1945,
-> but changed several times in the years before then.
-> How would you handle this if you were creating a table of GDP per capita for Poland
-> for the entire twentieth century?
-{: .challenge}
 
 
 [pandas-dataframe]: https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html
