@@ -584,7 +584,7 @@ dtype: int64
 
 ## Your assignment
 
-For next class, complete the following exercise:
+For your final assignment, complete the following exercise:
 
 Use what you've learned to write a script that uses the Pandas library to reads the insurance cost data from `insurance.csv` and outputs summary statistics for data in the 'BMI' column, grouped by smokers and non-smokers. Include the minimum value, maximum value, median, and average.
 
