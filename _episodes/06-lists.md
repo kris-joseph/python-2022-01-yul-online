@@ -98,7 +98,7 @@ ages has become: [6, 1, 3, 2]
 teen_ages = [19, 18, 14, 17]
 middle_ages = [46, 56, 37, 41]
 print('ages is currently:', ages)
-child_ages.extend(teen_ages)
+ages.extend(teen_ages)
 print('ages has now become:', ages)
 ages.append(middle_ages)
 print('ages has finally become:', ages)

@@ -68,7 +68,7 @@ print(data.iloc[0, 0])
 *   You can also specify location by column and/or row name, in a similar way using dictionary keys.
 
 ~~~
-print(data.loc[0 "smoker"])
+print(data.loc[0, "smoker"])
 ~~~
 {: .language-python}
 ~~~
@@ -182,7 +182,7 @@ dtype: float64
 subset = data.loc[0:20, 'bmi':'children']
 print('Subset of data:\n', subset)
 
-# Which values were greater than 20000 ?
+# Which values were greater than 30 ?
 print('\nWhere are values large?\n', subset > 30)
 ~~~
 {: .language-python}

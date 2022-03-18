@@ -74,28 +74,28 @@ print(data)
 ## Use `index_col` to specify that a column's values should be used as row headings.
 
 *   Row headings are numbers (0 and 1 in this case).
-*   Let's say we want to index our data by the `region` column instead of relying on the row numbers from the first example.
-*   Pass the name of the column to `read_csv` as its `index_col` parameter to do this.
+*   Let's say we want to index our data by the `bmi` column instead of relying on the row numbers from the first example. We are assuming here that all of our BMI values are unique -- ideall, the column we use as an index should be able to uniquely-identify a record. For example, for personal data you might use a "unique" observation like a phone number or membership number as an index.
+*   To do this, pass the name of the column to `read_csv` as its `index_col` parameter to do this.
 
 ~~~
-data = pd.read_csv('insurance.csv', index_col='region')
+data = pd.read_csv('insurance.csv', index_col='bmi')
 print(data)
 ~~~
 {: .language-python}
 ~~~
-           age     sex     bmi  children smoker      charges
-region                                                      
-southwest   19  female  27.900         0    yes  16884.92400
-southeast   18    male  33.770         1     no   1725.55230
-southeast   28    male  33.000         3     no   4449.46200
-northwest   33    male  22.705         0     no  21984.47061
-northwest   32    male  28.880         0     no   3866.85520
-...        ...     ...     ...       ...    ...          ...
-northwest   50    male  30.970         3     no  10600.54830
-northeast   18  female  31.920         0     no   2205.98080
-southeast   18  female  36.850         0     no   1629.83350
-southwest   21  female  25.800         0     no   2007.94500
-northwest   61  female  29.070         0    yes  29141.36030
+        age     sex  children smoker     region      charges
+bmi                                                         
+27.900   19  female         0    yes  southwest  16884.92400
+33.770   18    male         1     no  southeast   1725.55230
+33.000   28    male         3     no  southeast   4449.46200
+22.705   33    male         0     no  northwest  21984.47061
+28.880   32    male         0     no  northwest   3866.85520
+...     ...     ...       ...    ...        ...          ...
+30.970   50    male         3     no  northwest  10600.54830
+31.920   18  female         0     no  northeast   2205.98080
+36.850   18  female         0     no  southeast   1629.83350
+25.800   21  female         0     no  southwest   2007.94500
+29.070   61  female         0    yes  northwest  29141.36030
 
 [1338 rows x 6 columns]
 ~~~
@@ -109,33 +109,33 @@ data.info()
 {: .language-python}
 ~~~
 <class 'pandas.core.frame.DataFrame'>
-Index: 1338 entries, southwest to northwest
+Float64Index: 1338 entries, 27.9 to 29.07
 Data columns (total 6 columns):
  #   Column    Non-Null Count  Dtype  
 ---  ------    --------------  -----  
  0   age       1338 non-null   int64  
  1   sex       1338 non-null   object 
- 2   bmi       1338 non-null   float64
- 3   children  1338 non-null   int64  
- 4   smoker    1338 non-null   object 
+ 2   children  1338 non-null   int64  
+ 3   smoker    1338 non-null   object 
+ 4   region    1338 non-null   object 
  5   charges   1338 non-null   float64
-dtypes: float64(2), int64(2), object(2)
+dtypes: float64(1), int64(2), object(3)
 memory usage: 73.2+ KB
 ~~~
 {: .output}
 
 *   This is a `DataFrame`
-*   Four rows named `'southwest'`, `'southeast'`, `'northwestwest'`,and `'northeast'`
+*   Our index colum is BMI
 *   Six columns, containing float, int, and object values.
     *   We will talk later about null values, which are used to represent missing observations.
-    *   Why are only six columns? This is because we are using the seventh column (region) as the index
+    *   Why are only six columns? This is because we are using the one of the columns (bmi) as the index
 *   Uses 73.2 kilobytes of memory.
 
 ## The `DataFrame.columns` variable stores information about the dataframe's columns.
 
-*   Note that this is data, *not* a method.  (It doesn't have parentheses.)
-    *   Like `math.pi`.
-    *   So do not use `()` to try to call it.
+*   Note that this is a method, *not* a function (it doesn't have parentheses) -- it is a property of the DataFrame object. 
+    *   This is similar to `math.pi`.
+    *   No need to use `()` to try to call it.
 *   Called a *member variable*, or just *member*.
 
 ~~~
@@ -158,39 +158,39 @@ print(data.T)
 ~~~
 {: .language-python}
 ~~~
-region    southwest  southeast southeast    northwest  northwest  southeast  \
-age              19         18        28           33         32         31   
-sex          female       male      male         male       male     female   
-bmi            27.9      33.77      33.0       22.705      28.88      25.74   
-children          0          1         3            0          0          0   
-smoker          yes         no        no           no         no         no   
-charges   16884.924  1725.5523  4449.462  21984.47061  3866.8552  3756.6216   
+bmi          27.900     33.770     33.000       22.705     28.880     25.740  \
+age              19         18         28           33         32         31   
+sex          female       male       male         male       male     female   
+children          0          1          3            0          0          0   
+smoker          yes         no         no           no         no         no   
+region    southwest  southeast  southeast    northwest  northwest  southeast   
+charges   16884.924  1725.5523   4449.462  21984.47061  3866.8552  3756.6216   
 
-region    southeast  northwest  northeast    northwest  ...    northeast  \
+bmi          33.440     27.740     29.830       25.840  ...       24.225  \
 age              46         37         37           60  ...           23   
 sex          female     female       male       female  ...       female   
-bmi           33.44      27.74      29.83        25.84  ...       24.225   
 children          1          3          2            0  ...            2   
 smoker           no         no         no           no  ...           no   
+region    southeast  northwest  northeast    northwest  ...    northeast   
 charges   8240.5896  7281.5056  6406.4107  28923.13692  ...  22395.74424   
 
-region    southwest   southeast    southwest  southwest   northwest  \
+bmi          38.600      25.740       33.400     44.700      30.970  \
 age              52          57           23         52          50   
 sex            male      female       female     female        male   
-bmi            38.6       25.74         33.4       44.7       30.97   
 children          2           2            0          3           3   
 smoker           no          no           no         no          no   
+region    southwest   southeast    southwest  southwest   northwest   
 charges   10325.206  12629.1656  10795.93733  11411.685  10600.5483   
 
-region    northeast  southeast southwest   northwest  
-age              18         18        21          61  
-sex          female     female    female      female  
-bmi           31.92      36.85      25.8       29.07  
-children          0          0         0           0  
-smoker           no         no        no         yes  
-charges   2205.9808  1629.8335  2007.945  29141.3603  
+bmi          31.920     36.850     25.800      29.070  
+age              18         18         21          61  
+sex          female     female     female      female  
+children          0          0          0           0  
+smoker           no         no         no         yes  
+region    northeast  southeast  southwest   northwest  
+charges   2205.9808  1629.8335   2007.945  29141.3603  
 
-[6 rows x 1338 columns]
+[6 rows x 1338 columns] 
 ~~~
 {: .output}
 
@@ -205,15 +205,15 @@ print(data.describe())
 ~~~
 {: .language-python}
 ~~~
-               age          bmi     children       charges
-count  1338.000000  1338.000000  1338.000000   1338.000000
-mean     39.207025    30.663397     1.094918  13270.422265
-std      14.049960     6.098187     1.205493  12110.011237
-min      18.000000    15.960000     0.000000   1121.873900
-25%      27.000000    26.296250     0.000000   4740.287150
-50%      39.000000    30.400000     1.000000   9382.033000
-75%      51.000000    34.693750     2.000000  16639.912515
-max      64.000000    53.130000     5.000000  63770.428010
+               age     children       charges
+count  1338.000000  1338.000000   1338.000000
+mean     39.207025     1.094918  13270.422265
+std      14.049960     1.205493  12110.011237
+min      18.000000     0.000000   1121.873900
+25%      27.000000     0.000000   4740.287150
+50%      39.000000     1.000000   9382.033000
+75%      51.000000     2.000000  16639.912515
+max      64.000000     5.000000  63770.428010
 ~~~
 {: .output}
 
@@ -239,11 +239,11 @@ max      64.000000    53.130000     5.000000  63770.428010
 > >    ~~~
 > >    {: .language-python}
 > >    ~~~
-> >     age sex bmi children    smoker  charges
-> > region                      
-> > southwest   19  female  27.90   0   yes 16884.9240
-> > southeast   18  male    33.77   1   no  1725.5523
-> > southeast   28  male    33.00   3   no  4449.4620
+> >     age     sex     children    smoker  region  charges
+> > bmi                         
+> > 27.90   19  female  0   yes     southwest   16884.9240
+> > 33.77   18  male    1   no  southeast   1725.5523
+> > 33.00   28  male    3   no  southeast   4449.4620
 > >    ~~~
 > >    {: .output}
 > > 2. To check out the last three rows of `data`, we would use the command,
@@ -263,10 +263,11 @@ max      64.000000    53.130000     5.000000  63770.428010
 > >    ~~~
 > >    {: .language-python}
 > >    ~~~
-> >    region   southwest   southeast   southeast   northwest   northwest   southeast   southeast   northwest   northeast   northwest   ... northeast   southwest   southeast   southwest   southwest   northwest   northeast   southeast   southwest   northwest
-> > children    0   1   3   0   0   0   1   3   2   0   ... 2   2   2   0   3   3   0   0   0   0
-> > smoker  yes no  no  no  no  no  no  no  no  no  ... no  no  no  no  no  no  no  no  no  yes
-> > charges 16884.924   1725.5523   4449.462    21984.47061 3866.8552   3756.6216   8240.5896   7281.5056   6406.4107   28923.13692 ... 22395.74424 10325.206   12629.1656  10795.93733 11411.685   10600.5483  2205.9808   1629.8335   2007.945    29141.3603
+> > bmi     27.900  33.770  33.000  22.705  28.880  25.740  33.440  27.740  29.830  25.840  ...     24.225  38.600  25.740  33.400  44.700  30.970  31.920  36.850  25.800  29.070
+> > smoker  yes     no  no  no  no  no  no  no  no  no  ...     no  no  no  no  no  no  no  no  no  yes
+> > region  southwest   southeast   southeast   northwest   northwest   southeast   southeast   northwest   northeast   northwest   ...     northeast   southwest   southeast   southwest   southwest   northwest   northeast   southeast   southwest   northwest
+> > charges     16884.924   1725.5523   4449.462    21984.47061     3866.8552   3756.6216   8240.5896   7281.5056   6406.4107   28923.13692     ...     22395.74424     10325.206   12629.1656  10795.93733     11411.685   10600.5483  2205.9808   1629.8335   2007.945    29141.3603
+> > 
 > > 3 rows × 1338 columns
 > >    ~~~
 > >    {: .output}
