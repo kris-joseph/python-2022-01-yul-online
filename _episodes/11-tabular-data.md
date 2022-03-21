@@ -74,8 +74,8 @@ print(data)
 ## Use `index_col` to specify that a column's values should be used as row headings.
 
 *   Row headings are numbers (0 and 1 in this case).
-*   Let's say we want to index our data by the `bmi` column instead of relying on the row numbers from the first example. We are assuming here that all of our BMI values are unique -- ideall, the column we use as an index should be able to uniquely-identify a record. For example, for personal data you might use a "unique" observation like a phone number or membership number as an index.
-*   To do this, pass the name of the column to `read_csv` as its `index_col` parameter to do this.
+*   Let's say we want to index our data by the `bmi` column instead of relying on the row numbers from the first example. We are assuming here that all of our BMI values are unique -- ideally, the column we use as an index should be able to uniquely-identify a record. For example, for personal data you might use a "unique" observation like a phone number or membership number as an index.
+*   To do this, pass the name of the column to `read_csv` as its `index_col` parameter.
 
 ~~~
 data = pd.read_csv('insurance.csv', index_col='bmi')
@@ -127,6 +127,7 @@ memory usage: 73.2+ KB
 *   This is a `DataFrame`
 *   Our index colum is BMI
 *   Six columns, containing float, int, and object values.
+    *   Why isn't it 7 columns?
     *   We will talk later about null values, which are used to represent missing observations.
     *   Why are only six columns? This is because we are using the one of the columns (bmi) as the index
 *   Uses 73.2 kilobytes of memory.
@@ -139,6 +140,7 @@ memory usage: 73.2+ KB
 *   Called a *member variable*, or just *member*.
 
 ~~~
+data = pd.read_csv('insurance.csv')  # Reload the data WITHOUT using the bmi column as the index
 print(data.columns)
 ~~~
 {: .language-python}
