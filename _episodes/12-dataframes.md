@@ -56,6 +56,10 @@ print(data.iloc[0, 0])
 ~~~
 {: .language-python}
 ~~~
+   age     sex    bmi  children smoker     region     charges
+0   19  female  27.90         0    yes  southwest  16884.9240
+1   18    male  33.77         1     no  southeast   1725.5523
+2   28    male  33.00         3     no  southeast   4449.4620
 19
 ~~~
 {: .output}
